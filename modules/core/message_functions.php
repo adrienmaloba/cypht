@@ -105,6 +105,9 @@ function reply_to_address($headers, $type) {
     $msg_cc = '';
     $headers = lc_headers($headers);
     $parsed = array();
+    $delivered_address = array('email' => $headers['delivered-to'], 
+        'comment' => '', 'label' => '');
+
     if ($type == 'forward') {
         return $msg_to;
     }
@@ -122,6 +125,7 @@ function reply_to_address($headers, $type) {
             $parsed += $cc_parsed;
         }
         if (array_key_exists('to', $headers)) {
+            $parsed[] = $delivered_address;
             list($parsed, $recips) = format_reply_address($headers['to'], $parsed);
             if ($recips) {
                 if ($msg_cc) {
